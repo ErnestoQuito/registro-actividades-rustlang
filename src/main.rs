@@ -1,7 +1,5 @@
 use std::io::{self, Write};
 use chrono::prelude::*;
-use std::thread;
-use std::time::Duration;
 
 fn saludos() {
     let saludo = "## BIENVENIDO AL REGISTRO DE TAREAS ##";
@@ -35,14 +33,34 @@ fn nombre_tarea() -> String {
 
 fn main() {
     saludos();
+    // Iniciamos loop
+    loop {
+        // iniciamos tarea y el tiempo de inicio.
+        let task = nombre_tarea();
+        let start_task= Local::now();
 
-    let task = nombre_tarea();
-    let start_task= Local::now();
-    print!("INICIO={}={}", start_task, task.trim());
-    io::stdout().flush().unwrap();
+        // Imprimimos inicio y tarea.
+        println!("TAREA EN CURSO:\t{}", task.trim());
+        println!("INICIO:\t\t{}", start_task);
+        println!("FIN:\t\tEN CURSO");
 
-    thread::sleep(Duration::new(4, 0));
+        // Esperamos enter para finalizar tareas
+        println!("Press enter (new task) or 'q' (exit) ...");
+        let mut enter_key = String::new();
+        io::stdin()
+            .read_line(&mut enter_key)
+            .unwrap();
+        
+        if enter_key == "\n" {
+            let end_task = Local::now();
+            println!("FIN:\t\t{}", end_task);
+        }
 
-    let end_task = Local::now();
-    println!(" - Fin: {}", end_task);
+        if enter_key.trim() == "q" {
+            let end_task = Local::now();
+            println!("FIN:\t\t{}", end_task);
+            println!("Good bye");
+            break;
+        }
+    }
 }
